@@ -16,10 +16,12 @@ class Markov():
                     self.d[chars[-1]][''.join(chars[: len(chars) - 1])] += 1
                 except:
                     try:
-                        self.d[chars[-1]].update({''.join(chars[: len(chars) - 1]) : 1})
+                        self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
+                        # self.d[chars[-1]].update({''.join(chars[: len(chars) - 1]) : 1})
                     except:
                         self.d.update({chars[-1] : {}})
-                        self.d[chars[-1]].update({''.join(chars[: len(chars) - 1]) : 1})
+                        self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
+                        # self.d[chars[-1]].update({''.join(chars[: len(chars) - 1]) : 1})
         self.convertToP()
 
     def convertToP(self):
@@ -32,25 +34,33 @@ class Markov():
             for prefix, count in v.items():
                 self.p[k].update({prefix : count / c})
 
-        pprint(self.p)
+        return self.p
 
     def window(self):
         for i in range(len(self.text) - self.order + 2):
             yield self.text[i : i + self.order + 1]
 
-    def longestWord(self):
-        l = self.text.split()
-        m = 0
-        for word in l:
-            if (len(word) > m) :
-                m = len(word)
-                print('found new longest word ' + word + ' | ' + str(len(word)))
+    def computeSumX(self, x):
+        c = 0
+        for k,v in self.d.items():
+            for prefix, count in v.items():
+                if (x == prefix):
+                    c += count
+        return c
 
-
-
+    def computeTotalCount(self):
+        c = 0
+        for k,v in self.d.items():
+            for prefix, count in v.items():
+                c += count
+        return c
 
 if __name__ == '__main__':
     text = importText('texts/english/warandpeace.txt')
-    # text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque aliquet volutpat tincidunt. Vivamus a tempor est. Morbi arcu eros, molestie non augue vel, imperdiet lacinia turpis. Fusce malesuada ut eros quis laoreet. Mauris sodales purus et eros porttitor tincidunt. Donec blandit, lacus vitae ultrices placerat, ligula lorem molestie ex, et ultricies lectus nisi rutrum urna. Vivamus sollicitudin metus a ante imperdiet aliquet. Suspendisse pellentesque velit a vehicula faucibus. Pellentesque nisi turpis, commodo sed dui ac, ullamcorper mollis tortor.'
-    Markov(text.lower(), order = 1).build()
-    # Markov(text.lower()).longestWord()
+    m = Markov(text.lower(), order = 1)
+    m.build()
+    print(m.computeSumX('e'))
+    print(m.computeTotalCount())
+
+    # with open('images/jpg/landscape.jpg', 'rb') as f:
+    #     Markov(f.read().lower(), order = 1).build()

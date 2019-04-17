@@ -24,12 +24,13 @@ def computeH0(text):
             d[c] = 1
         else:
             d[c] += 1
+
     p = convertCountToProbability(d)
     return computeBitsNeeded(p)
 
 if __name__ == '__main__':
     text = importText("texts/english/warandpeace_1.txt")
-    print('H0 for text: ' + str(computeH0(text)))
+    print('H0 for text: ' + str(computeH0(text.lower())))
     text = importText("texts/gujarati/warandpeace_1.en.gu.txt")
     print('H0 for text: ' + str(computeH0(text)))
 
