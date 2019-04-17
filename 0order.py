@@ -28,11 +28,14 @@ def computeH0(text):
     return computeBitsNeeded(p)
 
 if __name__ == '__main__':
-    d = {}
-    text = importText("ulysses.txt")
+    text = importText("texts/english/warandpeace_1.txt")
     print('H0 for text: ' + str(computeH0(text)))
-    text = importText("warandpeace.txt")
+    text = importText("texts/gujarati/warandpeace_1.en.gu.txt")
     print('H0 for text: ' + str(computeH0(text)))
 
-    with open('image.jpg', 'rb') as f:
-        print('H0 for image: ' + str(computeH0(f)))
+    # with open('images/jpg/landscape.jpg', 'rb') as f:
+    #     print('H0 for image: ' + str(computeH0(f)))
+    # with open('images/bmp/landscape.bmp', 'rb') as f:
+    #     print('H0 for image: ' + str(computeH0(f)))
+    # with open('images/png/landscape.png', 'rb') as f:
+    #     print('H0 for image: ' + str(computeH0(f)))
