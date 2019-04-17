@@ -1,5 +1,6 @@
 from util import importText
 from pprint import pprint
+from math import log2
 
 class Markov():
     def __init__(self, text, order = 1):
@@ -54,6 +55,15 @@ class Markov():
             for prefix, count in v.items():
                 c += count
         return c
+    def computeH1(self):
+        sum = 0
+        for y, v in self.d.items():
+            for x, count in v.items():
+                pyx = count / self.computeSumX(x) 
+                px = self.computeSumX(x) / self.computeTotalCount() 
+                sum += -log2(pyx) * pyx * px
+        return sum
+
 
 if __name__ == '__main__':
     text = importText('texts/english/warandpeace.txt')
@@ -61,6 +71,7 @@ if __name__ == '__main__':
     m.build()
     print(m.computeSumX('e'))
     print(m.computeTotalCount())
+    print(m.computeH1())
 
     # with open('images/jpg/landscape.jpg', 'rb') as f:
     #     Markov(f.read().lower(), order = 1).build()
