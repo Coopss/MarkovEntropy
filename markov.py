@@ -1,6 +1,7 @@
 from util import importText
 from pprint import pprint
 from math import log2
+import re
 
 class Markov():
     def __init__(self, text, order = 1):
@@ -8,6 +9,7 @@ class Markov():
         self.order = order
         self.d = {}
         self.p = {}
+        self.X = {}
 
     def build(self):
         for word in self.window():
@@ -42,13 +44,19 @@ class Markov():
             yield self.text[i : i + self.order + 1]
 
     def computeSumX(self, x):
-        c = 0
-        for k,v in self.d.items():
-            for prefix, count in v.items():
-                if (x == prefix):
-                    c += count
-        return c
-
+        # c = 0
+        # for k,v in self.d.items():
+            # for prefix, count in v.items():
+                # if (x == prefix):
+                    # c += count
+        # return c
+        if x not in self.X:
+            c = len(self.text.split(x))
+            self.X[x] = c
+        return self.X[x]
+        #return c
+        
+    
     def computeTotalCount(self):
         c = 0
         for k,v in self.d.items():
@@ -67,7 +75,7 @@ class Markov():
 
 if __name__ == '__main__':
     text = importText('texts/english/warandpeace.txt')
-    m = Markov(text.lower(), order = 1)
+    m = Markov(text.lower(), order = 5)
     m.build()
     print(m.computeSumX('e'))
     print(m.computeTotalCount())
