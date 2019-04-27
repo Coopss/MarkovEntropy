@@ -4,7 +4,8 @@ from math import log2
 import re
 
 class Markov():
-    def __init__(self, text, order = 1):
+    def __init__(self, text, order = 1, isImage=False):
+        self.isImage = isImage
         self.text = text
         self.order = order
         self.d = {}
@@ -55,7 +56,16 @@ class Markov():
                 except:
                     self.X.update({substring : 1})
 
-        return self.X[x]
+        try:
+            if(self.isImage):
+                print(str(bytearray(x, 'ascii')))
+                return self.X[bytearray(x, 'ascii')]
+            else:
+                return self.X[x]
+        except:
+            print(x)
+            print(self.X)
+            exit()
         # if x not in self.X:
             # c = len(self.text.split(x))
             # self.X[x] = c

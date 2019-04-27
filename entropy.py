@@ -17,7 +17,7 @@ class MarkovEntropy():
             self.m = ZOrder(self.text.lower())
 
         else:
-            self.m = Markov(self.text.lower(), order = order)
+            self.m = Markov(self.text.lower(), order = order, isImage=isImage)
 
 
     def build(self):
@@ -38,6 +38,6 @@ class MarkovEntropy():
 
 if __name__ == '__main__':
     # m = MarkovEntropy('texts/english/warandpeace.txt', order=4, isImage=False)
-    m = MarkovEntropy('images/jpg/balloons.jpg', order=1, isImage=True)
+    m = MarkovEntropy('images/jpg/balloons.jpg', order=2, isImage=True)
     m.build()
     print("Entropy: " + str(m.entropy()))
