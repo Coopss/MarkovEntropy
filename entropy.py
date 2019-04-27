@@ -4,7 +4,7 @@ from util import importText
 
 class MarkovEntropy():
     def __init__(self, path, order):
-        self.text = importText('texts/english/warandpeace.txt')
+        self.text = importText(path)
         self.order = order
 
         self.model = None # define global model
@@ -32,6 +32,6 @@ class MarkovEntropy():
 
 
 if __name__ == '__main__':
-    m = MarkovEntropy('texts/english/warandpeace.txt', order=1)
+    m = MarkovEntropy('images/jpg/balloons.jpg', order=0)
     m.build()
     print("Entropy: " + str(m.entropy()))
