@@ -1,10 +1,15 @@
 from ZOrder import ZOrder
 from KOrder import Markov
-from util import importText
+from util import importText, importImage
 
 class MarkovEntropy():
-    def __init__(self, path, order):
-        self.text = importText(path)
+    def __init__(self, path, order, isImage=False):
+        self.text = None # define placeholder
+        if (isImage):
+            self.text = importImage(path)
+        else:
+            self.text = importText(path)
+
         self.order = order
 
         self.model = None # define global model
@@ -32,6 +37,7 @@ class MarkovEntropy():
 
 
 if __name__ == '__main__':
-    m = MarkovEntropy('images/jpg/balloons.jpg', order=0)
+    # m = MarkovEntropy('texts/english/warandpeace.txt', order=4, isImage=False)
+    m = MarkovEntropy('images/jpg/balloons.jpg', order=1, isImage=True)
     m.build()
     print("Entropy: " + str(m.entropy()))

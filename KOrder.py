@@ -9,7 +9,7 @@ class Markov():
         self.order = order
         self.d = {}
         self.p = {}
-        self.X = {}
+        self.X = {} # substring dict
 
     def build(self):
         for word in self.window():
@@ -44,17 +44,22 @@ class Markov():
             yield self.text[i : i + self.order + 1]
 
     def computeSumX(self, x):
-        # c = 0
-        # for k,v in self.d.items():
-            # for prefix, count in v.items():
-                # if (x == prefix):
-                    # c += count
-        # return c
-        if x not in self.X:
-            c = len(self.text.split(x))
-            self.X[x] = c
+        def window(fseq, window_size):
+            for i in range(len(fseq) - window_size + 1):
+                yield fseq[i:i+window_size]
+
+        if (not self.X):
+            for substring in window(self.text, self.order):
+                try:
+                    self.X[substring] += 1
+                except:
+                    self.X.update({substring : 1})
+
         return self.X[x]
-        #return c
+        # if x not in self.X:
+            # c = len(self.text.split(x))
+            # self.X[x] = c
+        # return self.X[x]
 
 
     def computeTotalCount(self):
@@ -63,6 +68,7 @@ class Markov():
             for prefix, count in v.items():
                 c += count
         return c
+
     def computeHk(self):
         sum = 0
         for y, v in self.d.items():
@@ -74,12 +80,12 @@ class Markov():
 
 
 if __name__ == '__main__':
-    text = importText('texts/english/warandpeace.txt')
-    m = Markov(text.lower(), order = 3)
-    m.build()
-    print(m.computeSumX('e'))
-    print(m.computeTotalCount())
-    print(m.computeH1())
+    # text = importText('texts/english/warandpeace.txt')
+    # m = Markov(text.lower(), order = 3)
+    # m.build()
+    # print(m.computeSumX('e'))
+    # print(m.computeTotalCount())
 
-    # with open('images/jpg/landscape.jpg', 'rb') as f:
-    #     Markov(f.read().lower(), order = 1).build()
+    with open('images/jpg/landscape.jpg', 'rb') as f:
+        Markov(f.read().lower(), order = 1).build()
+        print(m.computeHk())
