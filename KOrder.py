@@ -55,27 +55,27 @@ class Markov():
             self.X[x] = c
         return self.X[x]
         #return c
-        
-    
+
+
     def computeTotalCount(self):
         c = 0
         for k,v in self.d.items():
             for prefix, count in v.items():
                 c += count
         return c
-    def computeH1(self):
+    def computeHk(self):
         sum = 0
         for y, v in self.d.items():
             for x, count in v.items():
-                pyx = count / self.computeSumX(x) 
-                px = self.computeSumX(x) / self.computeTotalCount() 
+                pyx = count / self.computeSumX(x)
+                px = self.computeSumX(x) / self.computeTotalCount()
                 sum += -log2(pyx) * pyx * px
         return sum
 
 
 if __name__ == '__main__':
     text = importText('texts/english/warandpeace.txt')
-    m = Markov(text.lower(), order = 5)
+    m = Markov(text.lower(), order = 3)
     m.build()
     print(m.computeSumX('e'))
     print(m.computeTotalCount())
