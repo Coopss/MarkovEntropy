@@ -15,17 +15,29 @@ class Markov():
     def build(self):
         for word in self.window():
             if (len(word) == self.order + 1):
-                chars = list(word)
+                if (self.isImage):
+                    chars = bytearray(word)
+                else:
+                    chars = list(word)
                 try:
-                    self.d[chars[-1]][''.join(chars[: len(chars) - 1])] += 1
+                    if (self.isImage):
+                        self.d[bytes(chars[-1])][bytes(chars[:-1])] += 1
+                    else:
+                        self.d[chars[-1]][''.join(chars[: len(chars) - 1])] += 1
                 except:
                     try:
-                        self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
-                        # self.d[chars[-1]].update({''.join(chars[: len(chars) - 1]) : 1})
+                        if (self.isImage):
+                            self.d[bytes(chars[-1])].update({bytes(chars[:-1]) : 1})
+                        else:
+                            self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
                     except:
-                        self.d.update({chars[-1] : {}})
-                        self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
-                        # self.d[chars[-1]].update({''.join(chars[: len(chars) - 1]) : 1})
+                        if (self.isImage):
+                            self.d.update({bytes(chars[-1]) : {}})
+                            self.d[bytes(chars[-1])].update({bytes(chars[:-1]) : 1})
+                        else:
+                            self.d.update({chars[-1] : {}})
+                            self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
+
         self.convertToP()
 
     def convertToP(self):
@@ -56,21 +68,7 @@ class Markov():
                 except:
                     self.X.update({substring : 1})
 
-        try:
-            if(self.isImage):
-                print(str(bytearray(x, 'ascii')))
-                return self.X[bytearray(x, 'ascii')]
-            else:
-                return self.X[x]
-        except:
-            print(x)
-            print(self.X)
-            exit()
-        # if x not in self.X:
-            # c = len(self.text.split(x))
-            # self.X[x] = c
-        # return self.X[x]
-
+        return self.X[x]
 
     def computeTotalCount(self):
         c = 0
