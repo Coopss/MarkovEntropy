@@ -2,7 +2,9 @@ from util import importText
 from pprint import pprint
 from math import log2
 import re
-
+import numpy as np
+from ordered_set import OrderedSet
+import pandas as pd 
 class Markov():
     def __init__(self, text, order = 1, isImage=False):
         self.isImage = isImage
@@ -51,6 +53,31 @@ class Markov():
                 self.p[k].update({prefix : count / c})
 
         return self.p
+    def convertToMatrix(self):
+        # negOrder = -1 * (self.order)
+        set1 = OrderedSet()
+        for k, v in self.d.items():
+            for x, y in v.items():             
+                s = x[-1:]
+                toState =  s + k 
+                fromState = x
+                set1.add(toState)
+                set1.add(fromState)
+        self.array = np.zeros(shape=(len(set1), len(set1)))
+        for k, v in self.d.items():
+            for x, y in v.items():
+                summation = 0
+                for m, n in self.d.items():
+                    for p, q in n.items():
+                        if (p == x):
+                            summation+= q
+                s = x[-1:]
+                toState = s+k
+                fromState = x
+                self.array[set1.index(fromState)][set1.index(toState)] = y / summation
+        print(len(set1))
+        pd.DataFrame(self.array).to_csv("yash.csv")
+                
 
     def window(self):
         for i in range(len(self.text) - self.order + 2):
