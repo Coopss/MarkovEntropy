@@ -54,12 +54,12 @@ class Markov():
 
         return self.p
     def convertToMatrix(self):
-        # negOrder = -1 * (self.order)
+        negOrder = -1 * (self.order)
         set1 = OrderedSet()
         for k, v in self.d.items():
             for x, y in v.items():             
-                s = x[-1:]
-                toState =  s + k 
+                s = x[negOrder:]
+                toState =  k 
                 fromState = x
                 set1.add(toState)
                 set1.add(fromState)
@@ -71,12 +71,18 @@ class Markov():
                     for p, q in n.items():
                         if (p == x):
                             summation+= q
-                s = x[-1:]
-                toState = s+k
+                s = x[negOrder:]
+                toState = k
                 fromState = x
                 self.array[set1.index(fromState)][set1.index(toState)] = y / summation
         print(len(set1))
-        pd.DataFrame(self.array).to_csv("yash.csv")
+        dict1 = {}
+        # pd.DataFrame(self.array).to_csv("yash.csv")
+        for row in self.array:
+             for item in set1:
+                 dict1.update({item:row})
+        df = pd.DataFrame(dict1)
+        df.to_csv('yash.csv')
                 
 
     def window(self):
