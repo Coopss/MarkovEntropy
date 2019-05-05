@@ -41,7 +41,7 @@ class Markov():
                             self.d[chars[-1]].update({''.join(str(x) for x in chars[: len(chars) - 1]) : 1})
 
         self.convertToP()
-
+        
     def convertToP(self):
         for k,v in self.d.items():
             c = 0
@@ -109,6 +109,7 @@ class Markov():
             for prefix, count in v.items():
                 c += count
         return c
+
 
     def computeHk(self):
         sum = 0
