@@ -13,7 +13,6 @@ class Markov():
         self.d = {}
         self.p = {}
         self.X = {} # substring dict
-
     def build(self):
         for word in self.window():
             if (len(word) == self.order + 1):
@@ -53,12 +52,12 @@ class Markov():
                 self.p[k].update({prefix : count / c})
 
         return self.p
-    def convertToMatrix(self):
+    def convertToMatrix(self, filename):
         negOrder = -1 * (self.order)
         set1 = OrderedSet()
         for k, v in self.d.items():
             for x, y in v.items():             
-                s = x[negOrder:]
+                # s = x[negOrder:]
                 toState =  k 
                 fromState = x
                 set1.add(toState)
@@ -70,19 +69,19 @@ class Markov():
                 for m, n in self.d.items():
                     for p, q in n.items():
                         if (p == x):
-                            summation+= q
-                s = x[negOrder:]
+                            summation += q
+                # s = x[negOrder:]
                 toState = k
                 fromState = x
                 self.array[set1.index(fromState)][set1.index(toState)] = y / summation
         print(len(set1))
-        dict1 = {}
+        # dict1 = {}
         # pd.DataFrame(self.array).to_csv("yash.csv")
-        for row in self.array:
-             for item in set1:
-                 dict1.update({item:row})
-        df = pd.DataFrame(dict1)
-        df.to_csv('yash.csv')
+        # for row in self.array:
+        #      for item in set1:
+        #          dict1.update({item:row})
+        df = pd.DataFrame(self.array)
+        df.to_csv(filename)
                 
 
     def window(self):

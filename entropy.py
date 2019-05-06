@@ -20,6 +20,7 @@ class MarkovEntropy():
 
         else:
             self.m = Markov(self.text.lower(), order = order, isImage=isImage)
+        
 
 
     def build(self):
@@ -43,6 +44,8 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--order', type=int, help='Order, must be >= 0', required=True)
     parser.add_argument('-f', '--filepath', help='Path to file', required=True)
     parser.add_argument('-i', '--isImage', help='Flag to identify image file', action='store_true')
+    parser.add_argument('-csv', '--csvFile', help="Name of the output CSV file", required=False)
+
     args = parser.parse_args()
 
     if not (args.order >= 0):
@@ -52,3 +55,4 @@ if __name__ == '__main__':
     m = MarkovEntropy(args.filepath, order=args.order, isImage=args.isImage)
     m.build()
     print(args.filepath + " %d-order entropy: " % args.order + str(m.entropy()))
+    m.m.convertToMatrix("ulysses.csv") # Just a test
